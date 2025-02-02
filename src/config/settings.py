@@ -8,13 +8,13 @@ load_dotenv()
 
 
 class EnvSettings(BaseSettings):
-    # Google Drive configuration – if still needed
-    gdrive_folder_link: Annotated[
-        str, Field(default=os.environ["GDRIVE_FOLDER_LINK"])
-    ]
 
-    gdrive_folder_download_path: Annotated[
-        str, Field(default=os.getenv("GDRIVE_FOLDER_DOWNLOAD_PATH", "tmp"))
+    # Variable for data
+    raw_data_path: Annotated[
+        str, Field(default=os.getenv("RAW_DATA_PATH", "tmp"))
+    ]
+    data_path: Annotated[
+        str, Field(default=os.getenv("RAW_DATA_PATH", "data"))
     ]
 
     # ClearML configuration
@@ -28,15 +28,11 @@ class EnvSettings(BaseSettings):
         str, Field(default=os.getenv("CLEARML_FILE_SERVER", "https://files.clear.ml"))
     ]
     clearml_access_key: Annotated[
-        str, Field(default=os.environ["CLEARML_ACCESS_KEY"])
+        str, Field(default=os.environ["CLEARML_API_ACCESS_KEY"])
     ]
     clearml_secret_key: Annotated[
-        str, Field(default=os.environ["CLEARML_SECRET_KEY"])
+        str, Field(default=os.environ["CLEARML_API_SECRET_KEY"])
     ]
     clearml_project_name: Annotated[
         str, Field(default=os.getenv("CLEARML_PROJECT_NAME", "RASTER_TO_GRAPH"))
     ]
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
