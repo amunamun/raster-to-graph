@@ -1,0 +1,14 @@
+Metadata-Version: 2.2
+Name: raster-to-graph
+Version: 0.0.1
+Summary: Training Raster to Graph
+Requires-Python: >=3.10
+Requires-Dist: opencv-python~=4.8.0.74
+Requires-Dist: python-dotenv==0.21.0
+Requires-Dist: gdown==5.2.0
+Requires-Dist: clearml==1.17.1
+Requires-Dist: pydantic_settings==2.7.1
+Requires-Dist: loguru==0.7.3
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
