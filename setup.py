@@ -10,7 +10,9 @@ setup(
         "gdown==5.2.0",
         "clearml==1.17.1",
         "pydantic_settings==2.7.1",
-        "loguru==0.7.3"
+        "loguru==0.7.3",
+        "pandas==2.2.3",
+        "networkx==3.4.2"
     ],
     python_requires=">=3.10",
 )

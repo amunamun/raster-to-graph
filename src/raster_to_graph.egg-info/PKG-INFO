@@ -9,6 +9,7 @@ Requires-Dist: gdown==5.2.0
 Requires-Dist: clearml==1.17.1
 Requires-Dist: pydantic_settings==2.7.1
 Requires-Dist: loguru==0.7.3
+Requires-Dist: pandas==2.2.3
 Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary
