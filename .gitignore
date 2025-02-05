@@ -5,3 +5,4 @@ build/
 *__pycache__*
 src/raster_to_graph.egg-info/*
 data/
+output/

@@ -226,7 +226,7 @@ class GeometryProcessor:
 
     def plot_segments(self,
             segments: List[Tuple[Tuple[int, int], Tuple[int, int]]],
-            input_image: str = 'src/utils/plain_sheet.png',
+            input_image: str = 'src/data_utils/plain_sheet.png',
             output_image: str = "polygons.png"
     ) -> None:
         """

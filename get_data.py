@@ -1,14 +1,15 @@
 import json
 from pathlib import Path
+from datetime import datetime
 from typing import Tuple, Dict, List
 import numpy as np
+from clearml import Dataset
 from loguru import logger
-
 from src.config.settings import EnvSettings
-from src.utils.local import list_matched_files, reset_directory
-from src.utils.manip import process_image
-from src.utils.geometry import GeometryProcessor
-from src.utils.graph import GraphAnnotator
+from src.data_utils.local import list_matched_files, reset_directory
+from src.data_utils.img_manip import process_image
+from src.data_utils.geometry import GeometryProcessor
+from src.data_utils.graph import GraphAnnotator
 
 
 def process_file_pair(
@@ -18,7 +19,8 @@ def process_file_pair(
         new_resolution: Tuple[int, int],
         category_id: int,
         annot_id: int,
-        annot_npy_dir: Path
+        annot_npy_dir: Path,
+        annot_bbox_dir: Path
 ):
     """
     Process a single image-annotation file pair.
@@ -56,14 +58,17 @@ def process_file_pair(
         category_id=category_id,
         logger=logger
     )
-    coordinate_graph, _ = annotator.build_graphs()
+    coordinate_graph, code_graph = annotator.build_graphs()
     annotations, annot_id = annotator.create_annotations(annot_id=annot_id)
 
-    # Save coordinate graph as numpy file
     npy_path = annot_npy_dir / f"{image_id}.npy"
     np.save(str(npy_path), coordinate_graph)
 
-    return image_info, annotations, annot_id
+    original_vector_bbox = annotator.create_structure_bbox()
+    npy_path = annot_bbox_dir / f"{image_id}.npy"
+    np.save(str(npy_path), original_vector_bbox)
+
+    return image_info, annotations, annot_id, image_id
 
 
 def process_split_set(
@@ -74,8 +79,9 @@ def process_split_set(
         new_resolution: Tuple[int, int],
         category_id: int,
         annot_json_folder: Path,
-        annot_npy_dir: Path
-) -> None:
+        annot_npy_dir: Path,
+        annot_bbox_dir: Path
+) -> List[str]:
     """
     Process one split set (e.g., 'train', 'val', etc.) by iterating through
     matched image and annotation files.
@@ -99,23 +105,28 @@ def process_split_set(
     annot_id = 0
 
     # Process each image-annotation pair
-    for raw_img_path, raw_annot_path in zip(image_paths, annot_paths):
-        image_info, annotations, annot_id = process_file_pair(
+    image_ids = []
+    for image_no, files in enumerate(zip(image_paths, annot_paths)):
+        raw_img_path, raw_annot_path = files
+        image_info, annotations, annot_id, image_id = process_file_pair(
             raw_img_path,
             raw_annot_path,
             output_folder,
             new_resolution,
             category_id,
             annot_id,
-            annot_npy_dir
+            annot_npy_dir,
+            annot_bbox_dir
         )
         output_json["images"].append(image_info)
         output_json["annotations"].extend(annotations)
+        image_ids.append(image_id)
 
     # Save combined JSON file for this split set
     with open(str(output_json_file), 'w') as f:
         json.dump(output_json, f, indent=4)
     logger.info(f"Saved JSON for split '{split_set}' to {output_json_file}")
+    return image_ids
 
 
 def main() -> None:
@@ -130,8 +141,19 @@ def main() -> None:
         5. Save combined JSON metadata.
     """
     env = EnvSettings()
+    now = datetime.now()
+    logger.info("Setting up CLear ML")
+    dataset_name = now.strftime("%Y-%m-%d %H:%M:%S")
+    # Create a new dataset version
+    dataset_name_file = Path(env.data_path) / f"dataset_name.txt"
+    dataset = Dataset.create(
+        dataset_name=dataset_name,
+        dataset_project=env.clearml_project_name,
+    )
     # Use pathlib for better path handling
     raw_data_path = Path(env.raw_data_path)
+    output_path = Path(env.output_path)
+    reset_directory(output_path)
     reset_directory(env.data_annot_json)
     reset_directory(env.data_annot_npy)
     reset_directory(env.data_original_vector_boundary)
@@ -142,13 +164,16 @@ def main() -> None:
         image_extensions=['.png', '.jpg'],
         annot_extensions=['.txt']
     )
-    new_resolution: Tuple[int, int] = (512, 512)
+    new_resolution: Tuple[int, int] = env.resolution_in_tuple
     category_id: int = 1
 
     # Process each split (e.g., 'train', 'val', etc.)
+    image_json_file = Path(env.data_path) / f"image_numbers.json"
+    image_numbers = {}
+    image_no = 1
     for split_set, file_groups in matched_files.items():
         image_paths, annot_paths = file_groups  # assume first list are images, second are annotations
-        process_split_set(
+        image_ids = process_split_set(
             split_set,
             image_paths,
             annot_paths,
@@ -156,8 +181,22 @@ def main() -> None:
             new_resolution,
             category_id,
             env.data_annot_json,
-            env.data_annot_npy
+            env.data_annot_npy,
+            env.data_original_vector_boundary
         )
+        for imgid in image_ids:
+            image_numbers[imgid] = image_no
+            image_no+=1
+    with open(str(image_json_file), 'w+') as f:
+        json.dump(image_numbers, f, indent=4)
+
+    with open(str(dataset_name_file), 'w+') as f:
+        f.write(dataset_name)
+    logger.info("Completed Processing Data. Uploading dataset to ClearML ....")
+
+    dataset.add_files(path=env.data_path)
+    dataset.upload()
+    logger.info(f"Dataset uploaded successfully! Dataset ID: {dataset.id}")
 
 
 if __name__ == "__main__":

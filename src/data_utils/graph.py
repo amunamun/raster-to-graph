@@ -13,7 +13,7 @@ class GraphAnnotator:
       - code_graph: Stores neighbor connectivity as a 4-character binary string representing
                     connections in the order [Up, Left, Down, Right].
 
-    The class also constructs a quadtree (via BFS) based on the coordinate graph and generates
+    The class also constructs a quatree (via BFS) based on the coordinate graph and generates
     annotation dictionaries for further processing.
     """
     # Mapping from binary edge string to an edge code integer.
@@ -101,7 +101,7 @@ class GraphAnnotator:
     def build_graphs(self) -> Tuple[Dict[Any, Any], Dict[Any, str]]:
         """
         Build the coordinate and code graphs from the segments.
-        Also constructs a quadtree via BFS that is stored in the coordinate_graph under the 'quadtree' key.
+        Also constructs a quatree via BFS that is stored in the coordinate_graph under the 'quatree' key.
 
         Returns:
             Tuple[Dict[Any, Any], Dict[Any, str]]:
@@ -140,29 +140,29 @@ class GraphAnnotator:
 
             self.logger.debug(f"Connected {pt1} to {pt2}; updated indices {dir_idx_pt1_to_pt2} and {dir_idx_pt2_to_pt1}.")
 
-        # Find the starting point closest to (0, 0) (ignore any special keys like 'quadtree')
-        valid_points = [pt for pt in self.coordinate_graph.keys() if pt != 'quadtree']
+        # Find the starting point closest to (0, 0) (ignore any special keys like 'quatree')
+        valid_points = [pt for pt in self.coordinate_graph.keys() if pt != 'quatree']
         origin = min(valid_points, key=lambda p: np.hypot(p[0], p[1]))
-        self.logger.info(f"Origin for quadtree determined as {origin}.")
+        self.logger.info(f"Origin for quatree determined as {origin}.")
 
-        # BFS to construct quadtree levels
+        # BFS to construct quatree levels
         visited = set()
         queue = deque([(origin, 0)])  # Each entry is a tuple: (point, level)
-        quadtree: Dict[int, List[Any]] = {}
+        quatree: Dict[int, List[Any]] = {}
 
         while queue:
             point, level = queue.popleft()
             if point in visited:
                 continue
             visited.add(point)
-            quadtree.setdefault(level, []).append(point)
+            quatree.setdefault(level, []).append(point)
             for neighbor in self.coordinate_graph[point]:
                 if neighbor != (-1, -1) and neighbor not in visited:
                     queue.append((neighbor, level + 1))
-            self.logger.debug(f"Point {point} added at level {level} in quadtree.")
+            self.logger.debug(f"Point {point} added at level {level} in quatree.")
 
-        self.coordinate_graph['quadtree'] = quadtree
-        self.logger.info(f"Quadtree construction complete with levels: {list(quadtree.keys())}")
+        self.coordinate_graph['quatree'] = [quatree]
+        self.logger.info(f"quatree construction complete with levels: {list(quatree.keys())}")
         return self.coordinate_graph, self.code_graph
 
     def get_edge_code(self, edges_class: str) -> int:
@@ -197,8 +197,8 @@ class GraphAnnotator:
         """
         self.logger.info("Creating annotations based on code graph.")
         for key, value in self.code_graph.items():
-            # Skip special keys (e.g., the 'quadtree' entry)
-            if key == 'quadtree':
+            # Skip special keys (e.g., the 'quatree' entry)
+            if key == 'quatree':
                 continue
             semantics = random.choices(
                 ['outside', 'kitchen', 'bathroom', 'bedroom', 'closet', 'corridor', 'restroom', 'balcony'],
@@ -217,3 +217,15 @@ class GraphAnnotator:
             annot_id += 1
         self.logger.info(f"Total annotations created: {len(self.annotations)}")
         return self.annotations, annot_id
+
+
+    def create_structure_bbox(self):
+        # Extract x and y values
+        x_values = [p[0] for p in self.code_graph.keys()]
+        y_values = [p[1] for p in self.code_graph.keys()]
+
+        # Compute bounding box
+        x_min, x_max = min(x_values), max(x_values)
+        y_min, y_max = min(y_values), max(y_values)
+
+        return {'x_min': x_min, 'y_min': y_min, 'x_max': x_max, 'y_max': y_max}

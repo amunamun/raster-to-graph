@@ -17,6 +17,9 @@ class EnvSettings(BaseSettings):
     data_path: Annotated[
         str, Field(default=os.getenv("RAW_DATA_PATH", "data"))
     ]
+    output_path: Annotated[
+        str, Field(default=os.getenv("OUTPUT_PATH", "data"))
+    ]
 
     # ClearML configuration
     clearml_web_server: Annotated[
@@ -40,13 +43,12 @@ class EnvSettings(BaseSettings):
 
     # Variables for Image
     resolution: Annotated[
-        str, Field(default=os.getenv("CLEARML_PROJECT_NAME", "RASTER_TO_GRAPH"))
+        str, Field(default=os.getenv("IMAGE_RESOLUTION", "512,512"))
     ]
-
 
     @property
     def resolution_in_tuple(self):
-        return tuple(self.resolution.split(","))
+        return tuple(map(int, self.resolution.split(",")))
 
     @property
     def data_annot_json(self):
