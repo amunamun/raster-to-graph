@@ -11,7 +11,7 @@ def get_args_parser():
     parser.add_argument('--lr_backbone', default=2e-5, type=float) # 2e-5->-6
     parser.add_argument('--lr_linear_proj_names', default=['reference_points', 'sampling_offsets'], type=str, nargs='+')
     parser.add_argument('--lr_linear_proj_mult', default=0.1, type=float)
-    parser.add_argument('--batch_size', default=1, type=int) # 1
+    parser.add_argument('--batch_size', default=4, type=int) # 16
     parser.add_argument('--weight_decay', default=1e-5, type=float)  # 1e-5
     parser.add_argument('--clip_max_norm', default=0.1, type=float,
                         help='gradient clipping max norm')  # 0.1
