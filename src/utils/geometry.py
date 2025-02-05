@@ -37,7 +37,7 @@ class GeometryProcessor:
         if logger is None:
             raise ValueError("A logger instance must be provided.")
         self.logger = logger
-        self.logger.debug("Initializing GeometryProcessor with file: %s", raw_annot_path)
+        self.logger.debug(f"Initializing GeometryProcessor with file: {raw_annot_path}")
         self.coordinates = self._read_coordinates(raw_annot_path)
         self.polygons = self._create_polygons()
         self.edges = self._extract_edges()
@@ -56,7 +56,7 @@ class GeometryProcessor:
         Returns:
             List[List[Tuple[int, int]]]: A list of coordinate pairs lists.
         """
-        self.logger.debug("Reading coordinates from file: %s", file_path)
+        self.logger.debug(f"Reading coordinates from file: {file_path}")
         coordinates_list: List[List[Tuple[int, int]]] = []
         try:
             with open(file_path, 'r') as file:
@@ -68,9 +68,9 @@ class GeometryProcessor:
                     parts = parts[:-2]
                     coordinates = [(int(parts[i]), int(parts[i + 1])) for i in range(0, len(parts), 2)]
                     coordinates_list.append(coordinates)
-            self.logger.debug("Read %d coordinate sets.", len(coordinates_list))
+            self.logger.debug(f"Read {len(coordinates_list)} coordinate sets.")
         except Exception as e:
-            self.logger.error("Error reading file %s: %s", file_path, e)
+            self.logger.error(f"Error reading file {file_path}: {e}")
             raise e
         return coordinates_list
 
@@ -83,7 +83,7 @@ class GeometryProcessor:
         """
         self.logger.debug("Creating polygons from coordinate data.")
         polygons = [Polygon(coords) for coords in self.coordinates if coords]
-        self.logger.debug("Created %d polygons.", len(polygons))
+        self.logger.debug(f"Created {len(polygons)} polygons.")
         return polygons
 
     def _extract_edges(self) -> List[LineString]:
@@ -95,7 +95,7 @@ class GeometryProcessor:
         """
         self.logger.debug("Extracting exterior edges from polygons.")
         edges = [LineString(p.exterior.coords) for p in self.polygons]
-        self.logger.debug("Extracted %d edges.", len(edges))
+        self.logger.debug(f"Extracted {len(edges)} edges.")
         return edges
 
     def _merge_edges(self) -> MultiLineString:
@@ -109,7 +109,7 @@ class GeometryProcessor:
         merged = linemerge(self.edges)
         if isinstance(merged, LineString):
             merged = MultiLineString([merged])
-        self.logger.debug("Merged edges into %d geometries.", len(merged.geoms))
+        self.logger.debug(f"Merged edges into {len(merged.geoms)} geometries.")
         return merged
 
     def _calculate_intersections(self) -> Set[Tuple[float, float]]:
@@ -128,7 +128,7 @@ class GeometryProcessor:
             elif inter.geom_type == "MultiPoint":
                 for pt in inter.geoms:
                     intersection_points.add((pt.x, pt.y))
-        self.logger.debug("Found %d intersection points.", len(intersection_points))
+        self.logger.debug(f"Found {len(intersection_points)} intersection points.")
         return intersection_points
 
     def _extract_vertices_and_edges(self) -> Tuple[
@@ -150,7 +150,7 @@ class GeometryProcessor:
                 edges_list.append((v1, v2))
                 vertices.update([v1, v2])
         vertices.update(self.intersection_points)
-        self.logger.debug("Extracted %d vertices and %d segments.", len(vertices), len(edges_list))
+        self.logger.debug(f"Extracted {len(vertices)} vertices and {len(edges_list)} segments.")
         return vertices, edges_list
 
     @staticmethod
@@ -221,7 +221,7 @@ class GeometryProcessor:
             p2 = (int(seg[1].x), int(seg[1].y))
             unique_segments.add((p1, p2))
         result = list(unique_segments)
-        self.logger.debug("Created %d unique segments.", len(result))
+        self.logger.debug(f"Created {len(result)} unique segments.")
         return result
 
     def plot_segments(self,
