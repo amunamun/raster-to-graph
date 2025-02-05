@@ -1,10 +1,11 @@
 import os
 import shutil
 import random
+from pathlib import Path
 from typing import List, Tuple, Dict
 
 
-def reset_directory(directory_path):
+def reset_directory(directory_path: Path):
     """
     Checks if a directory exists. If it does, deletes it and creates an empty one.
     
@@ -15,7 +16,7 @@ def reset_directory(directory_path):
         shutil.rmtree(directory_path)  # Delete the existing directory and its contents
     os.makedirs(directory_path)  # Create a new empty directory
 
-def list_matched_files(folder_path: str, image_extensions: List[str], annot_extensions: List[str]) -> Dict[str, Tuple[List[str], List[str]]]:
+def list_matched_files(folder_path: Path, image_extensions: List[str], annot_extensions: List[str]) -> Dict[str, Tuple[List[str], List[str]]]:
     """
     Lists files in a specified folder, ensuring that image files with various extensions and annot files
     with various extensions are aligned based on their base names.

@@ -12,7 +12,7 @@ setup(
         "pydantic_settings==2.7.1",
         "loguru==0.7.3",
         "pandas==2.2.3",
-        "networkx==3.4.2"
+        "cython==0.29.30"
     ],
     python_requires=">=3.10",
 )
