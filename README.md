@@ -50,12 +50,6 @@ export CC=gcc-10
 export CXX=g++-10
 ```
 
-### 5. Install the dependencies regarding Transformer model
-
-```bash
-sh src/training_utils/models/ops/maske.sh
-```
-
 ## Data Preparation
 
 ### Step 1: Download Data
