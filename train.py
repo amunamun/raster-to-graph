@@ -29,8 +29,10 @@ make_outputdir_and_log(args)
 env = EnvSettings()
 with open(os.path.join(args.dataset_path, 'dataset_name.txt'), "r") as f:
     dname = f.read()
-task = Task(project_name=env.clearml_project_name, task_name=f'Data: {dname} - Expt: {uuid.uuid4()}')
-task.connect(vars(args))
+task = Task.create(project_name=env.clearml_project_name, task_name=f'Data: {dname} - Expt: {uuid.uuid4()}')
+task.get_logger().report_text(f"Training Arguments: {vars(args)}")
+
+
 device = torch.device(args.device)
 set_random_seed(args)
 model = build_model(args)

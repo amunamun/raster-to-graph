@@ -6,3 +6,4 @@ build/
 src/raster_to_graph.egg-info/*
 data/
 output/
+model/
