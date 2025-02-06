@@ -156,12 +156,24 @@ def get_random_region_targets(given_layers, graphs, targets):
                             unnormalized_points.append(point)
                             break
 
+            # indices_for_semantic = []
+            # for unnormalized_point in unnormalized_points:
+            #     for ind, every_point in enumerate(targets_i['unnormalized_points']):
+            #         every_point = tuple(every_point.tolist())
+            #         if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(every_point[1] - unnormalized_point[1]) <= 2:
+            #             indices_for_semantic.append(ind)
             indices_for_semantic = []
             for unnormalized_point in unnormalized_points:
+                found = False
                 for ind, every_point in enumerate(targets_i['unnormalized_points']):
                     every_point = tuple(every_point.tolist())
-                    if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(every_point[1] - unnormalized_point[1]) <= 2:
+                    if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(
+                            every_point[1] - unnormalized_point[1]) <= 2:
                         indices_for_semantic.append(ind)
+                        found = True
+                        break  # Stop after the first match for this point.
+                if not found:
+                    print("Warning: No match found for unnormalized point:", unnormalized_point)
             assert len(unnormalized_points) == len(indices_for_semantic)
             semantic_left_up = []
             semantic_right_up = []
