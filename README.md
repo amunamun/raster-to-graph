@@ -4,7 +4,7 @@ Raster-to-Graph is a repository for converting raster data into graph representa
 
 ## Prerequisites
 
-- **Python:** 3.10.16 (recommended – tested in a Conda virtual environment)
+- **Python:** 3.7.16 (recommended – tested in a Conda virtual environment)
 - **CUDA:** Version 11.1 (if using GPU acceleration)
 - **Compiler:** g++-10 (for building native extensions)
 
