@@ -23,7 +23,7 @@ cd raster-to-graph
 Using Conda:
 
 ```bash
-conda create -n raster_to_graph python=3.10.16
+conda create -n raster_to_graph python=3.7.16
 conda activate raster_to_graph
 ```
 
