@@ -114,4 +114,4 @@ for epoch in range(start_epoch, max_epoch):
             'args': args,
         }, checkpoint_path)
     # evaluate
-    evaluate_iter(model, criterion, postprocessor, data_loader_val, epoch, args)
+    # evaluate_iter(model, criterion, postprocessor, data_loader_val, epoch, args)

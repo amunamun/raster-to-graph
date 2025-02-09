@@ -172,8 +172,8 @@ class SetCriterion(nn.Module):
         return {'loss_point': self.loss_points(outputs, targets, indices, num_points),
                 'loss_edge': self.loss_edges(outputs, targets, indices, num_points),
                 'loss_last_edge': self.loss_last_edges(outputs, targets, indices, num_points),
-                'loss_this_edge': self.loss_this_edges(outputs, targets, indices, num_points),
-                'loss_semantic_left_up': self.loss_semantic_left_up(outputs, targets, indices, num_points),
-                'loss_semantic_right_up': self.loss_semantic_right_up(outputs, targets, indices, num_points),
-                'loss_semantic_right_down': self.loss_semantic_right_down(outputs, targets, indices, num_points),
-                'loss_semantic_left_down': self.loss_semantic_left_down(outputs, targets, indices, num_points)}
+                'loss_this_edge': self.loss_this_edges(outputs, targets, indices, num_points)}
+                # 'loss_semantic_left_up': self.loss_semantic_left_up(outputs, targets, indices, num_points),
+                # 'loss_semantic_right_up': self.loss_semantic_right_up(outputs, targets, indices, num_points),
+                # 'loss_semantic_right_down': self.loss_semantic_right_down(outputs, targets, indices, num_points),
+                # 'loss_semantic_left_down': self.loss_semantic_left_down(outputs, targets, indices, num_points)}

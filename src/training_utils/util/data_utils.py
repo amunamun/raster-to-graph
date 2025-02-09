@@ -133,10 +133,10 @@ def get_random_region_targets(given_layers, graphs, targets):
         if sum(sampled_points_i.values()) == 0:
             random_region_target['edges'] = targets_i['edges'][:1]
 
-            random_region_target['semantic_left_up'] = targets_i['semantic_left_up'][:1]
-            random_region_target['semantic_right_up'] = targets_i['semantic_right_up'][:1]
-            random_region_target['semantic_right_down'] = targets_i['semantic_right_down'][:1]
-            random_region_target['semantic_left_down'] = targets_i['semantic_left_down'][:1]
+            # random_region_target['semantic_left_up'] = targets_i['semantic_left_up'][:1]
+            # random_region_target['semantic_right_up'] = targets_i['semantic_right_up'][:1]
+            # random_region_target['semantic_right_down'] = targets_i['semantic_right_down'][:1]
+            # random_region_target['semantic_left_down'] = targets_i['semantic_left_down'][:1]
 
             random_region_target['image_id'] = targets_i['image_id']
             random_region_target['size'] = targets_i['size']
@@ -162,28 +162,28 @@ def get_random_region_targets(given_layers, graphs, targets):
             #         every_point = tuple(every_point.tolist())
             #         if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(every_point[1] - unnormalized_point[1]) <= 2:
             #             indices_for_semantic.append(ind)
-            indices_for_semantic = []
-            for unnormalized_point in unnormalized_points:
-                found = False
-                for ind, every_point in enumerate(targets_i['unnormalized_points']):
-                    every_point = tuple(every_point.tolist())
-                    if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(
-                            every_point[1] - unnormalized_point[1]) <= 2:
-                        indices_for_semantic.append(ind)
-                        found = True
-                        break  # Stop after the first match for this point.
-                if not found:
-                    print("Warning: No match found for unnormalized point:", unnormalized_point)
-            assert len(unnormalized_points) == len(indices_for_semantic)
-            semantic_left_up = []
-            semantic_right_up = []
-            semantic_right_down = []
-            semantic_left_down = []
-            for ind in indices_for_semantic:
-                semantic_left_up.append(targets_i['semantic_left_up'][ind].item())
-                semantic_right_up.append(targets_i['semantic_right_up'][ind].item())
-                semantic_right_down.append(targets_i['semantic_right_down'][ind].item())
-                semantic_left_down.append(targets_i['semantic_left_down'][ind].item())
+            # indices_for_semantic = []
+            # for unnormalized_point in unnormalized_points:
+            #     found = False
+            #     for ind, every_point in enumerate(targets_i['unnormalized_points']):
+            #         every_point = tuple(every_point.tolist())
+            #         if abs(every_point[0] - unnormalized_point[0]) <= 2 and abs(
+            #                 every_point[1] - unnormalized_point[1]) <= 2:
+            #             indices_for_semantic.append(ind)
+            #             found = True
+            #             break  # Stop after the first match for this point.
+            #     if not found:
+            #         print("Warning: No match found for unnormalized point:", unnormalized_point)
+            # assert len(unnormalized_points) == len(indices_for_semantic)
+            # semantic_left_up = []
+            # semantic_right_up = []
+            # semantic_right_down = []
+            # semantic_left_down = []
+            # for ind in indices_for_semantic:
+            #     semantic_left_up.append(targets_i['semantic_left_up'][ind].item())
+            #     semantic_right_up.append(targets_i['semantic_right_up'][ind].item())
+            #     semantic_right_down.append(targets_i['semantic_right_down'][ind].item())
+            #     semantic_left_down.append(targets_i['semantic_left_down'][ind].item())
 
             edges = []
             for unnormalized_point in unnormalized_points:
@@ -222,14 +222,14 @@ def get_random_region_targets(given_layers, graphs, targets):
             random_region_target['edges'] = torch.tensor(edges, dtype=targets_i['edges'].dtype, device=targets_i['edges'].device)
 
 
-            random_region_target['semantic_left_up'] = torch.tensor(semantic_left_up, dtype=targets_i['semantic_left_up'].dtype,
-                                                                    device=targets_i['semantic_left_up'].device)
-            random_region_target['semantic_right_up'] = torch.tensor(semantic_right_up, dtype=targets_i['semantic_right_up'].dtype,
-                                                                    device=targets_i['semantic_right_up'].device)
-            random_region_target['semantic_right_down'] = torch.tensor(semantic_right_down, dtype=targets_i['semantic_right_down'].dtype,
-                                                                    device=targets_i['semantic_right_down'].device)
-            random_region_target['semantic_left_down'] = torch.tensor(semantic_left_down, dtype=targets_i['semantic_left_down'].dtype,
-                                                                    device=targets_i['semantic_left_down'].device)
+            # random_region_target['semantic_left_up'] = torch.tensor(semantic_left_up, dtype=targets_i['semantic_left_up'].dtype,
+            #                                                         device=targets_i['semantic_left_up'].device)
+            # random_region_target['semantic_right_up'] = torch.tensor(semantic_right_up, dtype=targets_i['semantic_right_up'].dtype,
+            #                                                         device=targets_i['semantic_right_up'].device)
+            # random_region_target['semantic_right_down'] = torch.tensor(semantic_right_down, dtype=targets_i['semantic_right_down'].dtype,
+            #                                                         device=targets_i['semantic_right_down'].device)
+            # random_region_target['semantic_left_down'] = torch.tensor(semantic_left_down, dtype=targets_i['semantic_left_down'].dtype,
+            #                                                         device=targets_i['semantic_left_down'].device)
 
 
             random_region_target['image_id'] = targets_i['image_id']
@@ -247,18 +247,18 @@ def get_random_region_targets(given_layers, graphs, targets):
             random_region_target['edges'] = 16 * torch.ones(targets_i['edges'][:1].shape, dtype=targets_i['edges'].dtype,
                                                             device=targets_i['edges'].device)
 
-            random_region_target['semantic_left_up'] = 11 * torch.ones(targets_i['semantic_left_up'][:1].shape,
-                                                                       dtype=targets_i['semantic_left_up'].dtype,
-                                                                        device=targets_i['semantic_left_up'].device)
-            random_region_target['semantic_right_up'] = 11 * torch.ones(targets_i['semantic_right_up'][:1].shape,
-                                                                       dtype=targets_i['semantic_right_up'].dtype,
-                                                                       device=targets_i['semantic_right_up'].device)
-            random_region_target['semantic_right_down'] = 11 * torch.ones(targets_i['semantic_right_down'][:1].shape,
-                                                                       dtype=targets_i['semantic_right_down'].dtype,
-                                                                       device=targets_i['semantic_right_down'].device)
-            random_region_target['semantic_left_down'] = 11 * torch.ones(targets_i['semantic_left_down'][:1].shape,
-                                                                       dtype=targets_i['semantic_left_down'].dtype,
-                                                                       device=targets_i['semantic_left_down'].device)
+            # random_region_target['semantic_left_up'] = 11 * torch.ones(targets_i['semantic_left_up'][:1].shape,
+            #                                                            dtype=targets_i['semantic_left_up'].dtype,
+            #                                                             device=targets_i['semantic_left_up'].device)
+            # random_region_target['semantic_right_up'] = 11 * torch.ones(targets_i['semantic_right_up'][:1].shape,
+            #                                                            dtype=targets_i['semantic_right_up'].dtype,
+            #                                                            device=targets_i['semantic_right_up'].device)
+            # random_region_target['semantic_right_down'] = 11 * torch.ones(targets_i['semantic_right_down'][:1].shape,
+            #                                                            dtype=targets_i['semantic_right_down'].dtype,
+            #                                                            device=targets_i['semantic_right_down'].device)
+            # random_region_target['semantic_left_down'] = 11 * torch.ones(targets_i['semantic_left_down'][:1].shape,
+            #                                                            dtype=targets_i['semantic_left_down'].dtype,
+            #                                                            device=targets_i['semantic_left_down'].device)
 
             random_region_target['image_id'] = targets_i['image_id']
             random_region_target['size'] = targets_i['size']

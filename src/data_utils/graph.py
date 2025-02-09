@@ -91,11 +91,12 @@ class GraphAnnotator:
         elif 45 < angle <= 135:
             return 0  # Up
         elif angle > 135 or angle < -135:
-            return 1  # Left
+            return 2  # Left
         elif -135 <= angle < -45:
-            return 2  # Down
+            return 1  # Down
         # Should not reach here; default to -1 if undefined
         self.logger.warning(f"Undefined direction for origin {origin} and point {point}. Angle: {angle}")
+        breakpoint()
         return -1
 
     def build_graphs(self) -> Tuple[Dict[Any, Any], Dict[Any, str]]:
@@ -201,7 +202,7 @@ class GraphAnnotator:
             if key == 'quatree':
                 continue
             semantics = random.choices(
-                ['outside', 'kitchen', 'bathroom', 'bedroom', 'closet', 'corridor', 'restroom', 'balcony'],
+                ['living_room', 'kitchen', 'bedroom', 'bathroom', 'restroom', 'balcony', 'closet', 'corridor', 'washing_room', 'PS', 'outside', 'wall', 'no_type'],
                 k=4
             )
             annotation = {

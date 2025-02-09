@@ -30,7 +30,7 @@ def process_file_pair(
         annot_id: Updated annotation ID after processing.
     """
     # Process image and get scaling/padding factors
-    new_img_path, scale_x, scale_y, left_padding, top_padding = process_image(
+    new_img_path, scale_x, scale_y = process_image(
         str(raw_img_path), str(output_folder), new_resolution
     )
     image_id = Path(new_img_path).stem  # Unique image ID based on filename without extension
@@ -48,8 +48,8 @@ def process_file_pair(
         segments=segments,
         scale_x=scale_x,
         scale_y=scale_y,
-        left_padding=left_padding,
-        top_padding=top_padding
+        # left_padding=left_padding,
+        # top_padding=top_padding
     )
 
     annotator = GraphAnnotator(
@@ -146,10 +146,10 @@ def main() -> None:
     dataset_name = now.strftime("%Y-%m-%d %H:%M:%S")
     # Create a new dataset version
     dataset_name_file = Path(env.data_path) / f"dataset_name.txt"
-    # dataset = Dataset.create(
-    #     dataset_name=dataset_name,
-    #     dataset_project=env.clearml_project_name,
-    # )
+    dataset = Dataset.create(
+        dataset_name=dataset_name,
+        dataset_project=env.clearml_project_name,
+    )
     # Use pathlib for better path handling
     raw_data_path = Path(env.raw_data_path)
     output_path = Path(env.output_path)
@@ -194,9 +194,9 @@ def main() -> None:
         f.write(dataset_name)
     logger.info("Completed Processing Data. Uploading dataset to ClearML ....")
 
-    # dataset.add_files(path=env.data_path)
-    # dataset.upload()
-    # logger.info(f"Dataset uploaded successfully! Dataset ID: {dataset.id}")
+    dataset.add_files(path=env.data_path)
+    dataset.upload()
+    logger.info(f"Dataset uploaded successfully! Dataset ID: {dataset.id}")
 
 
 if __name__ == "__main__":

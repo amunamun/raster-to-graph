@@ -258,8 +258,8 @@ class GeometryProcessor:
             segments: List[Tuple[Tuple[int, int], Tuple[int, int]]],
             scale_x: float,
             scale_y: float,
-            left_padding: int,
-            top_padding: int
+            # left_padding: int,
+            # top_padding: int
     ) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
         """
         Scale and translate segments by provided factors and paddings.
@@ -276,9 +276,9 @@ class GeometryProcessor:
         """
         scaled_segments = []
         for (x1, y1), (x2, y2) in segments:
-            new_x1 = int(x1 * scale_x + left_padding)
-            new_y1 = int(y1 * scale_y + top_padding)
-            new_x2 = int(x2 * scale_x + left_padding)
-            new_y2 = int(y2 * scale_y + top_padding)
+            new_x1 = int(x1 * scale_x)
+            new_y1 = int(y1 * scale_y)
+            new_x2 = int(x2 * scale_x)
+            new_y2 = int(y2 * scale_y)
             scaled_segments.append(((new_x1, new_y1), (new_x2, new_y2)))
         return scaled_segments

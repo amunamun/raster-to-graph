@@ -64,12 +64,8 @@ def get_args_parser():
     parser.add_argument('--last_edge_loss_coef', default=2, type=float, help='')
     parser.add_argument('--this_edge_loss_coef', default=2, type=float, help='')
     parser.add_argument('--semantic_loss_coef', default=0.5, type=float, help='')
-
-    parser.add_argument('--random_region', default=True, type=bool)
-
-
+    parser.add_argument('--random_region', default=False, type=bool)
     parser.add_argument('--dataset_path', default='data', type=str)
-
     parser.add_argument('--output_dir', default='output/testingaa',
                         help='例：./output/output_r2v_gtlayer2_multiscale'
                              'empty for no saving')

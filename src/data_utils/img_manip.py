@@ -5,8 +5,7 @@ from typing import Tuple
 
 def process_image(raw_img_path: str,
                   output_folder: str,
-                  new_resolution: Tuple[int, int]) -> Tuple[
-    str, float, float, int, int]:
+                  new_resolution: Tuple[int, int]):
     """
     Processes an image by resizing it, centering it on a canvas of target resolution,
     and saving the processed image.
@@ -29,19 +28,23 @@ def process_image(raw_img_path: str,
 
     with Image.open(raw_img_path) as img:
         original_width, original_height = img.size
-        scale_x = new_width / original_width
-        scale_y = new_height / original_height
-
-        # Resize image while maintaining aspect ratio
-        img.thumbnail(new_resolution)
-
-        # Create a blank white canvas and calculate padding to center the image
-        canvas = Image.new("RGB", new_resolution, (255, 255, 255))
-        left_padding = (new_width - img.width) // 2
-        top_padding = (new_height - img.height) // 2
-        canvas.paste(img, (left_padding, top_padding))
-
-        # Save the processed image
-        canvas.save(new_img_path)
-
-    return new_img_path, scale_x, scale_y, left_padding, top_padding
+        scale_x = new_width / float(original_width)
+        scale_y = new_height / float(original_height)
+        # scale_x = new_width / original_width
+        # scale_y = new_height / original_height
+        #
+        # # Resize image while maintaining aspect ratio
+        # img.thumbnail(new_resolution)
+        #
+        # # Create a blank white canvas and calculate padding to center the image
+        # canvas = Image.new("RGB", new_resolution, (255, 255, 255))
+        # left_padding = (new_width - img.width) // 2
+        # top_padding = (new_height - img.height) // 2
+        # canvas.paste(img, (left_padding, top_padding))
+        #
+        # # Save the processed image
+        # canvas.save(new_img_path)
+        img_resized = img.resize((new_width, new_height), Image.LANCZOS)
+        img_resized.save(new_img_path)
+    return new_img_path, scale_x, scale_y
+    # return new_img_path, scale_x, scale_y, left_padding, top_padding

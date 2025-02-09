@@ -29,10 +29,10 @@ def train_one_epoch(task, model, criterion, data_loader, optimizer, epoch, max_n
     total_loss_edge_value = 0
     total_loss_last_edge_value = 0
     total_loss_this_edge_value = 0
-    total_loss_semantic_left_up_value = 0
-    total_loss_semantic_right_up_value = 0
-    total_loss_semantic_right_down_value = 0
-    total_loss_semantic_left_down_value = 0
+    # total_loss_semantic_left_up_value = 0
+    # total_loss_semantic_right_up_value = 0
+    # total_loss_semantic_right_down_value = 0
+    # total_loss_semantic_left_down_value = 0
 
     for batch_index, data in enumerate(data_loader):
         # data
@@ -72,17 +72,17 @@ def train_one_epoch(task, model, criterion, data_loader, optimizer, epoch, max_n
         loss_this_edge_value = loss_dict_weighted['loss_this_edge'].item()
         total_loss_this_edge_value += loss_this_edge_value
 
-        loss_semantic_left_up_value = loss_dict_weighted['loss_semantic_left_up'].item()
-        total_loss_semantic_left_up_value += loss_semantic_left_up_value
-
-        loss_semantic_right_up_value = loss_dict_weighted['loss_semantic_right_up'].item()
-        total_loss_semantic_right_up_value += loss_semantic_right_up_value
-
-        loss_semantic_right_down_value = loss_dict_weighted['loss_semantic_right_down'].item()
-        total_loss_semantic_right_down_value += loss_semantic_right_down_value
-
-        loss_semantic_left_down_value = loss_dict_weighted['loss_semantic_left_down'].item()
-        total_loss_semantic_left_down_value += loss_semantic_left_down_value
+        # loss_semantic_left_up_value = loss_dict_weighted['loss_semantic_left_up'].item()
+        # total_loss_semantic_left_up_value += loss_semantic_left_up_value
+        #
+        # loss_semantic_right_up_value = loss_dict_weighted['loss_semantic_right_up'].item()
+        # total_loss_semantic_right_up_value += loss_semantic_right_up_value
+        #
+        # loss_semantic_right_down_value = loss_dict_weighted['loss_semantic_right_down'].item()
+        # total_loss_semantic_right_down_value += loss_semantic_right_down_value
+        #
+        # loss_semantic_left_down_value = loss_dict_weighted['loss_semantic_left_down'].item()
+        # total_loss_semantic_left_down_value += loss_semantic_left_down_value
 
         # print loss
         count = batch_index + 1
@@ -94,10 +94,10 @@ def train_one_epoch(task, model, criterion, data_loader, optimizer, epoch, max_n
                   'loss_edge:', format(loss_edge_value, '.4f'), '\t',
                   'loss_last_edge:', format(loss_last_edge_value, '.4f'), '\t',
                   'loss_this_edge:', format(loss_this_edge_value, '.4f'), '\t',
-                  'loss_semantic_left_up:', format(loss_semantic_left_up_value, '.4f'), '\t',
-                  'loss_semantic_right_up:', format(loss_semantic_right_up_value, '.4f'), '\t',
-                  'loss_semantic_right_down:', format(loss_semantic_right_down_value, '.4f'), '\t',
-                  'loss_semantic_left_down:', format(loss_semantic_left_down_value, '.4f'), '\t',
+                  # 'loss_semantic_left_up:', format(loss_semantic_left_up_value, '.4f'), '\t',
+                  # 'loss_semantic_right_up:', format(loss_semantic_right_up_value, '.4f'), '\t',
+                  # 'loss_semantic_right_down:', format(loss_semantic_right_down_value, '.4f'), '\t',
+                  # 'loss_semantic_left_down:', format(loss_semantic_left_down_value, '.4f'), '\t',
                   'loss_point:', format(loss_point_value, '.4f'), '\t')
 
         if not math.isfinite(loss_value):
@@ -113,10 +113,10 @@ def train_one_epoch(task, model, criterion, data_loader, optimizer, epoch, max_n
           'avg_loss_last_edge:', format(total_loss_last_edge_value / len(data_loader), '.4f'), '\t',
           'avg_loss_this_edge:', format(total_loss_this_edge_value / len(data_loader), '.4f'), '\t',
 
-          'avg_loss_semantic_left_up:', format(total_loss_semantic_left_up_value / len(data_loader), '.4f'), '\t',
-          'avg_loss_semantic_right_up:', format(total_loss_semantic_right_up_value / len(data_loader), '.4f'), '\t',
-          'avg_loss_semantic_right_down:', format(total_loss_semantic_right_down_value / len(data_loader), '.4f'), '\t',
-          'avg_loss_semantic_left_down:', format(total_loss_semantic_left_down_value / len(data_loader), '.4f'), '\t',
+          # 'avg_loss_semantic_left_up:', format(total_loss_semantic_left_up_value / len(data_loader), '.4f'), '\t',
+          # 'avg_loss_semantic_right_up:', format(total_loss_semantic_right_up_value / len(data_loader), '.4f'), '\t',
+          # 'avg_loss_semantic_right_down:', format(total_loss_semantic_right_down_value / len(data_loader), '.4f'), '\t',
+          # 'avg_loss_semantic_left_down:', format(total_loss_semantic_left_down_value / len(data_loader), '.4f'), '\t',
 
           'avg_loss_point:', format(total_loss_point_value / len(data_loader), '.4f'))
     end_time = datetime.now()
@@ -129,10 +129,6 @@ def train_one_epoch(task, model, criterion, data_loader, optimizer, epoch, max_n
             'avg_loss_edge:' + str(format(total_loss_edge_value / len(data_loader), '.4f')) + '\t' + \
             'avg_loss_last_edge:' + str(format(total_loss_last_edge_value / len(data_loader), '.4f')) + '\t' + \
             'avg_loss_this_edge:' + str(format(total_loss_this_edge_value / len(data_loader), '.4f')) + '\t' + \
-            'avg_loss_semantic_left_up:' + str(format(total_loss_semantic_left_up_value / len(data_loader), '.4f')) + '\t' + \
-            'avg_loss_semantic_right_up:' + str(format(total_loss_semantic_right_up_value / len(data_loader), '.4f')) + '\t' + \
-            'avg_loss_semantic_right_down:' + str(format(total_loss_semantic_right_down_value / len(data_loader), '.4f')) + '\t' + \
-            'avg_loss_semantic_left_down:' + str(format(total_loss_semantic_left_down_value / len(data_loader), '.4f')) + '\t' + \
             'avg_loss_point:' + str(format(total_loss_point_value / len(data_loader), '.4f')) + '\t' + \
             'epoch train_time:' + time.strftime("%H:%M:%S", time.gmtime((end_time - start_time).seconds)) + '\n'
     f.write(f_str)
@@ -210,10 +206,10 @@ def evaluate_iter(model, criterion, postprocessor, data_loader, epoch, args):
                         valid_results_i['this_edges'] = results['this_edges'][valid_label_indice]
                         valid_results_i['edges'] = results['edges'][valid_label_indice]
                         valid_results_i['size'] = targets[0]['size']
-                        valid_results_i['semantic_left_up'] = results['semantic_left_up'][valid_label_indice]
-                        valid_results_i['semantic_right_up'] = results['semantic_right_up'][valid_label_indice]
-                        valid_results_i['semantic_right_down'] = results['semantic_right_down'][valid_label_indice]
-                        valid_results_i['semantic_left_down'] = results['semantic_left_down'][valid_label_indice]
+                        # valid_results_i['semantic_left_up'] = results['semantic_left_up'][valid_label_indice]
+                        # valid_results_i['semantic_right_up'] = results['semantic_right_up'][valid_label_indice]
+                        # valid_results_i['semantic_right_down'] = results['semantic_right_down'][valid_label_indice]
+                        # valid_results_i['semantic_left_down'] = results['semantic_left_down'][valid_label_indice]
                         this_preds.append(valid_results_i)
                     # NMS
                     # this_preds = nms(this_preds)
@@ -492,7 +488,7 @@ def evaluate_iter(model, criterion, postprocessor, data_loader, epoch, args):
 
 
             # room extraction
-            d_rev, simple_cycles, results = get_cycle_basis_and_semantic(best_result)
+            # d_rev, simple_cycles, results = get_cycle_basis_and_semantic(best_result)
             # d_rev, simple_cycles, results = get_cycle_basis_and_semantic_2(best_result)
 
             # visualize
@@ -508,10 +504,10 @@ def evaluate_iter(model, criterion, postprocessor, data_loader, epoch, args):
                 tgt_p_d['points'] = targets[0]['unnormalized_points'][_]
                 tgt_p_d['edges'] = targets[0]['edges'][_]
                 tgt_p_d['size'] = targets[0]['size']
-                tgt_p_d['semantic_left_up'] = targets[0]['semantic_left_up'][_]
-                tgt_p_d['semantic_right_up'] = targets[0]['semantic_right_up'][_]
-                tgt_p_d['semantic_right_down'] = targets[0]['semantic_right_down'][_]
-                tgt_p_d['semantic_left_down'] = targets[0]['semantic_left_down'][_]
+                # tgt_p_d['semantic_left_up'] = targets[0]['semantic_left_up'][_]
+                # tgt_p_d['semantic_right_up'] = targets[0]['semantic_right_up'][_]
+                # tgt_p_d['semantic_right_down'] = targets[0]['semantic_right_down'][_]
+                # tgt_p_d['semantic_left_down'] = targets[0]['semantic_left_down'][_]
                 tgt_this_preds.append(tgt_p_d)
                 for __ in range(4):
                     adj = graphs[0][tuple(tgt_p_d['points'].tolist())][__]
@@ -520,7 +516,7 @@ def evaluate_iter(model, criterion, postprocessor, data_loader, epoch, args):
                         tgt_p_d2 = {}
                         indx = 99999
                         for ___, up in enumerate(targets[0]['unnormalized_points'].tolist()):
-                            if abs(up[0] - adj[0]) + abs(up[1] - adj[1]) <= 2:
+                            if abs(up[0] - adj[0]) + abs(up[1] - adj[1]) <= 8:
                                 indx = ___
                                 break
                         assert indx != 99999
@@ -528,10 +524,10 @@ def evaluate_iter(model, criterion, postprocessor, data_loader, epoch, args):
                         tgt_p_d2['points'] = targets[0]['unnormalized_points'][indx]
                         tgt_p_d2['edges'] = targets[0]['edges'][indx]
                         tgt_p_d2['size'] = targets[0]['size']
-                        tgt_p_d2['semantic_left_up'] = targets[0]['semantic_left_up'][indx]
-                        tgt_p_d2['semantic_right_up'] = targets[0]['semantic_right_up'][indx]
-                        tgt_p_d2['semantic_right_down'] = targets[0]['semantic_right_down'][indx]
-                        tgt_p_d2['semantic_left_down'] = targets[0]['semantic_left_down'][indx]
+                        # tgt_p_d2['semantic_left_up'] = targets[0]['semantic_left_up'][indx]
+                        # tgt_p_d2['semantic_right_up'] = targets[0]['semantic_right_up'][indx]
+                        # tgt_p_d2['semantic_right_down'] = targets[0]['semantic_right_down'][indx]
+                        # tgt_p_d2['semantic_left_down'] = targets[0]['semantic_left_down'][indx]
                         tgt_e_l = (tgt_p_d1, tgt_p_d2)
                         if not edge_inside((tgt_p_d2, tgt_p_d1), tgt_this_edges):
                             tgt_this_edges.append(tgt_e_l)
